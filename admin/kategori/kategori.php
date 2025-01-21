@@ -229,7 +229,7 @@ Aksi
 
 <a  href="./proses/edit_kategori.php?id=<?= $row['id'] ?>" class="edit-link  dropdown-item">     <i class="bi bi-pencil-square text-warning"></i>Edit</a> </li>
 <li> 
-<a href="./proses/hapus_kategori.php?id=<?= $row['id'] ?>" class="delete-link dropdown-item" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">      <i class="bi bi-trash-fill text-danger"></i>Hapus</a>
+<!-- <a href="./proses/hapus_kategori.php?id=<?= $row['id'] ?>" class="delete-link dropdown-item" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">      <i class="bi bi-trash-fill text-danger"></i>Hapus</a> -->
 
 </li>
 
