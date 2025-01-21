@@ -218,13 +218,13 @@ if (isset($_SESSION['message'])) {
                   </tr>
                 </thead>
                 <tbody>
-                <?php $no = 1; foreach ($users as $user): ?>
+                <?php $no = 1; foreach ($users as $userr): ?>
                 <tr>
                     <td><?= $no++ ?></td>
-                    <td><?php echo $user['nama']; ?></td>
-                    <td><?php echo $user['email']; ?></td>
-                    <td><?php echo $user['alamat']; ?></td>
-                    <td><?php echo $user['jenis_kelamin']; ?></td>
+                    <td><?php echo $userr['nama']; ?></td>
+                    <td><?php echo $userr['email']; ?></td>
+                    <td><?php echo $userr['alamat']; ?></td>
+                    <td><?php echo $userr['jenis_kelamin']; ?></td>
              
                  
                     <td>
@@ -235,9 +235,9 @@ if (isset($_SESSION['message'])) {
   <ul class="dropdown-menu">
     <li>
 
-    <a  href="./proses/edit_user.php?id=<?= $user['id'] ?>" class="edit-link  dropdown-item">     <i class="bi bi-pencil-square text-warning"></i>Edit</a> </li>
+    <a  href="./proses/edit_user.php?id=<?= $userr['id'] ?>" class="edit-link  dropdown-item">     <i class="bi bi-pencil-square text-warning"></i>Edit</a> </li>
     <li> 
-    <a href="./proses/hapus_user.php?id=<?= $user['id'] ?>" class="delete-link dropdown-item" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">      <i class="bi bi-trash-fill text-danger"></i>Hapus</a>
+    <a href="./proses/hapus_user.php?id=<?= $userr['id'] ?>" class="delete-link dropdown-item" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">      <i class="bi bi-trash-fill text-danger"></i>Hapus</a>
 
     </li>
 

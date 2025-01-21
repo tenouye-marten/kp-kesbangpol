@@ -11,7 +11,7 @@ if (!isset($_SESSION['user'])) {
   exit();
 }
 
-$user = $_SESSION['user'];
+$us = $_SESSION['user'];
 
 // Inisialisasi controller
 // Inisialisasi controller
@@ -39,6 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_user'])) {
         header("Location: ../user.php");
     }
 }
+$id = $_GET['id'];
+$user = $userController->getUser($id);
 ?>
 
 <!DOCTYPE html>
@@ -110,12 +112,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_user'])) {
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="../../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">              <?php echo htmlspecialchars($user['nama']); ?></span>
+            <span class="d-none d-md-block dropdown-toggle ps-2">              <?php echo htmlspecialchars($us['nama']); ?></span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>              <?php echo htmlspecialchars($user['nama']); ?></h6>
+              <h6>              <?php echo htmlspecialchars($us['nama']); ?></h6>
             </li>
             <li>
               <hr class="dropdown-divider">
