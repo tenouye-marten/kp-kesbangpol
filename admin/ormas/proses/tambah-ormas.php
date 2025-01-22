@@ -241,20 +241,24 @@ $kategoriList = $kategoriModel->getAllKategori();
               <label for="inputNanme4" class="form-label">Keterangan</label>
               <input type="text" name="keterangan" class="form-control" id="inputNanme4">
             </div> -->
-
+            <div class="col-12">
+            <label for="inputNanme4" class="form-label">Keterangan</label>
             <select id="id_kategori" name="keterangan" class="form-select">
          
                     <option value="Aktif">Aktif</option>
                     <option value="Tidak Aktif">Tidak Aktif</option>
                 
                     </select>
-        
+                    </div>
 
+                    <div class="col-12">
+                    <label for="inputNanme4" class="form-label">Kategori</label>
             <select id="id_kategori" name="id_kategori" class="form-select">
             <?php foreach ($kategoriList as $kategori): ?>
                     <option value="<?php echo $kategori['id']; ?>"><?php echo $kategori['kategori']; ?></option>
                     <?php endforeach; ?>
                   </select>
+                  </div>
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Simpan</button>
               <button type="reset" class="btn btn-secondary">Reset</button>

@@ -16,25 +16,25 @@ $ormasModel = new OrmasModel($pdo);
 $kategoriModel = new KategoriModel($pdo);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id = $_POST['id'];
-    $nm_organisasi = $_POST['nm_organisasi'];
-    $nm_ketua = $_POST['nm_ketua'];
-    $nm_sekretaris = $_POST['nm_sekretaris'];
-    $nm_bendahara = $_POST['nm_bendahara'];
-    $alamat = $_POST['alamat'];
-    $keterangan = $_POST['keterangan'];
-    $id_kategori = $_POST['id_kategori'];
-    
-    $result = $ormasModel->updateOrmas($id, $nm_organisasi, $nm_ketua, $nm_sekretaris, $nm_bendahara, $alamat,$keterangan, $id_kategori);
-    if ($result) {
+  $id = $_POST['id'];
+  $nm_organisasi = $_POST['nm_organisasi'];
+  $nm_ketua = $_POST['nm_ketua'];
+  $nm_sekretaris = $_POST['nm_sekretaris'];
+  $nm_bendahara = $_POST['nm_bendahara'];
+  $alamat = $_POST['alamat'];
+  $keterangan = $_POST['keterangan'];
+  $id_kategori = $_POST['id_kategori'];
 
-      $_SESSION['message'] = "Data Ormas berhasil diubah.";
+  $result = $ormasModel->updateOrmas($id, $nm_organisasi, $nm_ketua, $nm_sekretaris, $nm_bendahara, $alamat, $keterangan, $id_kategori);
+  if ($result) {
 
-        header("Location: ../ormas.php");
-    } else {
-        header("Location: ../ormas.php");
-    }
-    exit();
+    $_SESSION['message'] = "Data Ormas berhasil diubah.";
+
+    header("Location: ../ormas.php");
+  } else {
+    header("Location: ../ormas.php");
+  }
+  exit();
 }
 
 $id = $_GET['id'];
@@ -54,7 +54,8 @@ $kategoriList = $kategoriModel->getAllKategori();
   <meta content="" name="description">
   <meta content="" name="keywords">
 
-  <!-- Favicons -->  <link href="assets/img/favicon.png" rel="icon">
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -105,25 +106,25 @@ $kategoriList = $kategoriModel->getAllKategori();
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
 
-   
 
-      
+
+
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="../../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">              <?php echo htmlspecialchars($user['nama']); ?></span>
+            <span class="d-none d-md-block dropdown-toggle ps-2"> <?php echo htmlspecialchars($user['nama']); ?></span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>              <?php echo htmlspecialchars($user['nama']); ?></h6>
+              <h6> <?php echo htmlspecialchars($user['nama']); ?></h6>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
 
-           
+
             <li>
               <a class="dropdown-item d-flex align-items-center" href="../../../login/logout.php">
                 <i class="bi bi-box-arrow-right"></i>
@@ -142,141 +143,147 @@ $kategoriList = $kategoriModel->getAllKategori();
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
 
-  <ul class="sidebar-nav" id="sidebar-nav">
+    <ul class="sidebar-nav" id="sidebar-nav">
 
-<li class="nav-item">
-  <a class="nav-link collapsed" href="../../dashboard.php">
-    <i class="bi bi-grid"></i>
-    <span>Dashboard</span>
-  </a>
-</li><!-- End Dashboard Nav -->
-
-
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="../../dashboard.php">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
 
 
 
-<li class="nav-heading">Data Master</li>
-
-<li class="nav-item ">
-  <a class="nav-link collapsed" href="../../parpol/parpol.php">
-    <i class="bi bi-person"></i>
-    <span>Data Parpol</span>
-  </a>
-</li><!-- End Profile Page Nav -->
-
-<li class="nav-item">
-  <a class="nav-link " href="../ormas/ormas.php">
-    <i class="bi bi-person"></i>
-    <span>Data Ormas</span>
-  </a>
-</li><!-- End Profile Page Nav -->
 
 
+      <li class="nav-heading">Data Master</li>
 
-<li class="nav-item">
-  <a class="nav-link collapsed" href="../../kategori/kategori.php">
-    <i class="bi bi-person"></i>
-    <span>Kategori</span>
-  </a>
-</li><!-- End Profile Page Nav -->
+      <li class="nav-item ">
+        <a class="nav-link collapsed" href="../../parpol/parpol.php">
+          <i class="bi bi-person"></i>
+          <span>Data Parpol</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
 
-<li class="nav-item">
-  <a class="nav-link collapsed" href="../../user/user.php">
-    <i class="bi bi-person"></i>
-    <span>Data User</span>
-  </a>
-</li><!-- End Profile Page Nav -->
+      <li class="nav-item">
+        <a class="nav-link " href="../ormas/ormas.php">
+          <i class="bi bi-person"></i>
+          <span>Data Ormas</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
 
 
 
-</ul>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="../../kategori/kategori.php">
+          <i class="bi bi-person"></i>
+          <span>Kategori</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="../../user/user.php">
+          <i class="bi bi-person"></i>
+          <span>Data User</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+
+
+    </ul>
 
   </aside><!-- End Sidebar-->
 
   <main id="main" class="main">
 
-<div class="pagetitle">
-  <h1>Edit Ormas</h1>
-  <nav>
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-      <li class="breadcrumb-item">Edit Ormas</li>
-    </ol>
-  </nav>
-</div><!-- End Page Title -->
-<section class="section">
-  <div class="row">
- 
+    <div class="pagetitle">
+      <h1>Edit Ormas</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+          <li class="breadcrumb-item">Edit Ormas</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+    <section class="section">
+      <div class="row">
 
-    <div class="col-lg-6">
 
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Form Edit</h5>
+        <div class="col-lg-6">
 
-             <!-- Vertical Form -->
-             <form method="post"  class="row g-3">
-             <input type="hidden" name="id" value="<?php echo $ormas['id']; ?>">
-          
-<div class="col-12">
-  <label for="inputNanme4" class="form-label">Nama Organisasi Masyarakat</label>
-  <input type="text"  value="<?php echo $ormas['nm_organisasi']; ?>" name="nm_organisasi" class="form-control" id="inputNanme4">
-</div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Form Edit</h5>
 
-<div class="col-12">
-  <label for="inputNanme4" class="form-label">Nama Ketua</label>
-  <input type="text"  value="<?php echo $ormas['nm_ketua']; ?>" name="nm_ketua" class="form-control" id="inputNanme4">
-</div>
+              <!-- Vertical Form -->
+              <form method="post" class="row g-3">
+                <input type="hidden" name="id" value="<?php echo $ormas['id']; ?>">
 
-<div class="col-12">
-  <label for="inputNanme4" class="form-label">Nama Sekretaris</label>
-  <input type="text"  value="<?php echo $ormas['nm_sekretaris']; ?>" name="nm_sekretaris" class="form-control" id="inputNanme4">
-</div>
+                <div class="col-12">
+                  <label for="inputNanme4" class="form-label">Nama Organisasi Masyarakat</label>
+                  <input type="text" value="<?php echo $ormas['nm_organisasi']; ?>" name="nm_organisasi" class="form-control" id="inputNanme4">
+                </div>
 
-<div class="col-12">
-  <label for="inputNanme4" class="form-label">Nama Bendahara</label>
-  <input type="text"  value="<?php echo $ormas['nm_bendahara']; ?>" name="nm_bendahara" class="form-control" id="inputNanme4">
-</div>
+                <div class="col-12">
+                  <label for="inputNanme4" class="form-label">Nama Ketua</label>
+                  <input type="text" value="<?php echo $ormas['nm_ketua']; ?>" name="nm_ketua" class="form-control" id="inputNanme4">
+                </div>
 
-<div class="col-12">
-  <label for="inputNanme4" class="form-label">alaamat</label>
-  <input type="text"  value="<?php echo $ormas['alamat']; ?>" name="alamat" class="form-control" id="inputNanme4">
-</div>
-<!-- <div class="col-12">
+                <div class="col-12">
+                  <label for="inputNanme4" class="form-label">Nama Sekretaris</label>
+                  <input type="text" value="<?php echo $ormas['nm_sekretaris']; ?>" name="nm_sekretaris" class="form-control" id="inputNanme4">
+                </div>
+
+                <div class="col-12">
+                  <label for="inputNanme4" class="form-label">Nama Bendahara</label>
+                  <input type="text" value="<?php echo $ormas['nm_bendahara']; ?>" name="nm_bendahara" class="form-control" id="inputNanme4">
+                </div>
+
+                <div class="col-12">
+                  <label for="inputNanme4" class="form-label">alaamat</label>
+                  <input type="text" value="<?php echo $ormas['alamat']; ?>" name="alamat" class="form-control" id="inputNanme4">
+                </div>
+                <!-- <div class="col-12">
   <label for="inputNanme4" class="form-label">Keterangan</laabel>
   <input type="text" name="keterangan" class="form-control" id="inputNanme4">
 </div> -->
 
-<select id="id_kategori" name="keterangan" class="form-select">
+                <div class="col-12">
+                <label for="inputNanme4" class="form-label">Keterangan</label>
+                <select id="id_kategori" name="keterangan" class="form-select">
 
-        <option selected  value="<?php echo $ormas['keterangan']; ?>"> <?php echo $ormas['keterangan']; ?></option>
-        <option value="Aktif">Aktif</option>
-        <option value="Tidak Aktif">Tidak Aktif</option>
-    
-        </select>
+                  <option selected value="<?php echo $ormas['keterangan']; ?>"> <?php echo $ormas['keterangan']; ?></option>
+                  <option value="Aktif">Aktif</option>
+                  <option value="Tidak Aktif">Tidak Aktif</option>
 
+                </select>
+            </div>
 
-<select id="id_kategori" name="id_kategori" class="form-select">
-<?php foreach ($kategoriList as $kategori): ?>
-        <option value="<?php echo $kategori['id']; ?>"><?php echo $kategori['kategori']; ?></option>
-        <?php endforeach; ?>
-      </select>
-<div class="text-center">
-  <button type="submit" class="btn btn-primary">Simpan</button>
-  <button type="reset" class="btn btn-secondary">Reset</button>
-</div>
-</form><!-- Vertical Form -->
+            <div class="col-12">
+              <label for="inputNanme4" class="form-label">Kategori</label>
+              <select id="id_kategori" name="id_kategori" class="form-select">
 
+                <?php foreach ($kategoriList as $kategori): ?>
+                  <option value="<?php echo $kategori['id']; ?>"><?php echo $kategori['kategori']; ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">Simpan</button>
+              <button type="reset" class="btn btn-secondary">Reset</button>
+            </div>
+            </form><!-- Vertical Form -->
+
+          </div>
         </div>
+
+
+
       </div>
+      </div>
+    </section>
 
-   
-
-    </div>
-  </div>
-</section>
-
-</main><!-- End #main -->
+  </main><!-- End #main -->
 
 
   <!-- ======= Footer ======= -->
@@ -284,7 +291,7 @@ $kategoriList = $kategoriModel->getAllKategori();
     <div class="copyright">
       &copy; Copyright <strong><span>Kesbangpol</span></strong>
     </div>
- 
+
   </footer><!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

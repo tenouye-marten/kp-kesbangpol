@@ -7,19 +7,43 @@ class OrmasModel {
     }
 
     // Fungsi untuk menambah ormas
-    public function tambahOrmas($nm_organisasi, $nm_ketua, $nm_sekretaris, $nm_bendahara, $alamat,$keterangan, $id_kategori) {
-        $query = "INSERT INTO tbl_ormas (nm_organisasi, nm_ketua, nm_sekretaris, nm_bendahara, alamat, keterangan, id_kategori) 
-                  VALUES (:nm_organisasi, :nm_ketua, :nm_sekretaris, :nm_bendahara, :alamat,:keterangan, :id_kategori)";
-        $stmt = $this->pdo->prepare($query);
-        $stmt->bindParam(':nm_organisasi', $nm_organisasi);
-        $stmt->bindParam(':nm_ketua', $nm_ketua);
-        $stmt->bindParam(':nm_sekretaris', $nm_sekretaris);
-        $stmt->bindParam(':nm_bendahara', $nm_bendahara);
-        $stmt->bindParam(':alamat', $alamat);
-        $stmt->bindParam(':keterangan', $keterangan);
-        $stmt->bindParam(':id_kategori', $id_kategori);
-        return $stmt->execute();
+    public function tambahOrmas($nm_organisasi, $nm_ketua, $nm_sekretaris, $nm_bendahara, $alamat, $keterangan, $id_kategori) {
+        try {
+            // Cek apakah id_kategori ada di tabel kategori
+            $cekQuery = "SELECT COUNT(*) FROM tbl_kategori WHERE id = :id";
+            $cekStmt = $this->pdo->prepare($cekQuery);
+            $cekStmt->bindParam(':id', $id_kategori, PDO::PARAM_INT);
+            $cekStmt->execute();
+            $kategoriAda = $cekStmt->fetchColumn();
+    
+            if ($kategoriAda == 0) {
+                throw new Exception("Error: ID kategori '$id_kategori' tidak ditemukan di tabel kategori.");
+            }
+    
+            // Jika valid, masukkan data baru ke tabel ormas
+            $query = "INSERT INTO tbl_ormas (nm_organisasi, nm_ketua, nm_sekretaris, nm_bendahara, alamat, keterangan, id_kategori) 
+                      VALUES (:nm_organisasi, :nm_ketua, :nm_sekretaris, :nm_bendahara, :alamat, :keterangan, :id_kategori)";
+            $stmt = $this->pdo->prepare($query);
+    
+            $stmt->bindParam(':nm_organisasi', $nm_organisasi);
+            $stmt->bindParam(':nm_ketua', $nm_ketua);
+            $stmt->bindParam(':nm_sekretaris', $nm_sekretaris);
+            $stmt->bindParam(':nm_bendahara', $nm_bendahara);
+            $stmt->bindParam(':alamat', $alamat);
+            $stmt->bindParam(':keterangan', $keterangan);
+            $stmt->bindParam(':id_kategori', $id_kategori, PDO::PARAM_INT);
+    
+            $stmt->execute();
+            return "Data ormas berhasil ditambahkan!";
+        } catch (PDOException $e) {
+            // Tangani error database
+            return "Database error: " . $e->getMessage();
+        } catch (Exception $e) {
+            // Tangani error umum lainnya
+            return $e->getMessage();
+        }
     }
+    
 
     // Fungsi untuk mendapatkan semua ormas
     public function getAllOrmas() {
