@@ -2,6 +2,7 @@
 session_start();
 // Include file koneksi
 
+include '../../koneksi.php';
 
 
 if (!isset($_SESSION['user'])) {
@@ -12,10 +13,9 @@ if (!isset($_SESSION['user'])) {
 $user = $_SESSION['user'];
 
 
-include '../../koneksi.php';
 
 // Query untuk mengambil data partai politik
-$query = "SELECT id,nm_parpol, nm_ketua, nm_sekretaris, nm_bendahara, alamat, periode_kepengurusan FROM tbl_parpol";
+$query = "SELECT id,nm_parpol, nm_ketua, nm_sekretaris, nm_bendahara, alamat, periode_kepengurusan,sk FROM tbl_parpol";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -218,12 +218,13 @@ if (isset($_SESSION['message'])) {
                     <th>
                       <b>N</b>ama
                     </th>
-                    <th>Alamat</th>
                     <th>Nama Ketua</th>
                     <th>Nama Sekretaris</th>
                     <th>Nama Bendahara</th>
+                    <th>Alamat</th>
                     <!-- <th data-type="date" data-format="YYYY/DD/MM">Start Date</th> -->
                     <th>Periode Kepengurusan</th>
+                    <th>SK</th>
                     <th>Aksi</th>
                   </tr>
                 </thead>
@@ -235,11 +236,34 @@ if (isset($_SESSION['message'])) {
                   <td><?= $no++ ?></td>
                         <td><?= htmlspecialchars($row['nm_parpol']) ?></td>
                         <td><?= htmlspecialchars($row['nm_ketua']) ?></td>
-                        <td><?= htmlspecialchars($row['alamat']) ?></td>
                         <td><?= htmlspecialchars($row['nm_sekretaris']) ?></td>
                         <td><?= htmlspecialchars($row['nm_bendahara']) ?></td>
+                        <td><?= htmlspecialchars($row['alamat']) ?></td>
                         <td><?= htmlspecialchars($row['periode_kepengurusan']) ?></td>
+                        
+                    <td scope="row">
+    <a href="#" data-bs-toggle="modal" data-bs-target="#modalSk-<?php echo $row['id']; ?>" class="text-decoration-none " style="font-size: small;">
+        <i class="bi bi-eye"></i> Lihat SK
+    </a>
+</td>
+
+<!-- Modal Popup -->
+<div class="modal fade" id="modalSk-<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="modalSkLabel-<?php echo $row['id']; ?>" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalSkLabel-<?php echo $row['id']; ?>">SK PARTAI POLITIK</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="imgSk/<?php echo htmlspecialchars($row['sk']); ?>" alt="SK Organisasi" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
                         <td class="action-links">
+
+
 
                         <div class="dropdown">
   <button class="btn btn-sm btn-outline  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

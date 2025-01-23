@@ -4,7 +4,7 @@ session_start();
 include './koneksi.php';
 
 // Query untuk mengambil data partai politik
-$query = "SELECT id,nm_parpol, nm_ketua, nm_sekretaris, nm_bendahara, alamat, periode_kepengurusan FROM tbl_parpol";
+$query = "SELECT id,nm_parpol, nm_ketua, nm_sekretaris, nm_bendahara, alamat, periode_kepengurusan,sk FROM tbl_parpol";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -56,7 +56,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
-      <a href="index.html" class="logo d-flex align-items-center me-auto">
+      <a href="#" class="logo d-flex align-items-center me-auto">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="assets/img/logo.png" alt=""> -->
         <h1 class="sitename">Kesbangpol Keerom</h1>
@@ -64,8 +64,8 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.html" class="active">Home<br></a></li>
-          <li><a href="about.html"></a></li>
+          <li><a href="index.php" class="active">Home<br></a></li>
+          <!-- <li><a href="about.html"></a></li> -->
          
      
           <li class="dropdown"><a href="#"><span>Informasi</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
@@ -95,7 +95,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <nav class="breadcrumbs">
           <ol>
             <li><a href="index.html">Home</a></li>
-            <li class="current">Ormas</li>
+            <li class="current">Parpol</li>
           </ol>
         </nav>
       </div>
@@ -105,6 +105,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <section id="about" class="about section my-5">
 
       <div class="container">
+      <h1 class="mb-4">Data Partai POlitik</h1>
 
         <div class="row gy-4">
 
@@ -129,6 +130,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <th>Nama Bendahara</th>
                     <!-- <th data-type="date" data-format="YYYY/DD/MM">Start Date</th> -->
                     <th>Periode Kepengurusan</th>
+                    <th>SK</th>
               
                   </tr>
                 </thead>
@@ -144,6 +146,26 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= htmlspecialchars($row['nm_sekretaris']) ?></td>
                         <td><?= htmlspecialchars($row['nm_bendahara']) ?></td>
                         <td><?= htmlspecialchars($row['periode_kepengurusan']) ?></td>
+                        <td scope="row">
+    <a href="#" data-bs-toggle="modal" data-bs-target="#modalSk-<?php echo $row['id']; ?>" class="text-decoration-none " style="font-size: small;">
+        <i class="bi bi-eye"></i> Lihat SK
+    </a>
+</td>
+
+<!-- Modal Popup -->
+<div class="modal fade" id="modalSk-<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="modalSkLabel-<?php echo $row['id']; ?>" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalSkLabel-<?php echo $row['id']; ?>">SK PARTAI POLITIK</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="admin/parpol/imgSk/<?php echo htmlspecialchars($row['sk']); ?>" alt="SK Organisasi" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
        
                   </tr>
                   <?php endforeach; ?>

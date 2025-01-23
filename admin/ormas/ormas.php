@@ -211,6 +211,7 @@ if (isset($_SESSION['message'])) {
                  <th>Nama Bendahara</th>
                  <th>Kategori</th>
                  <th>Keterangan</th>
+                 <th>SK</th>
                  <th>Aksi</th>
                   </tr>
                 </thead>
@@ -225,8 +226,30 @@ if (isset($_SESSION['message'])) {
                     <td><?php echo $ormas['nm_bendahara']; ?></td>
                     <td><?php echo $ormas['kategori']; ?></td>
                     <td><?php echo $ormas['keterangan']; ?></td>
-                  
-                    <td>
+        
+                    <td scope="row">
+    <a href="#" data-bs-toggle="modal" data-bs-target="#modalSk-<?php echo $ormas['id']; ?>" class="text-decoration-none " style="font-size: small;">
+        <i class="bi bi-eye"></i> Lihat SK
+    </a>
+</td>
+
+<!-- Modal Popup -->
+<div class="modal fade" id="modalSk-<?php echo $ormas['id']; ?>" tabindex="-1" aria-labelledby="modalSkLabel-<?php echo $ormas['id']; ?>" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalSkLabel-<?php echo $ormas['id']; ?>">Gambar SK Organisasi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="imgSk/<?php echo htmlspecialchars($ormas['sk']); ?>" alt="SK Organisasi" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
+<td>
+
                     <div class="dropdown">
   <button class="btn btn-sm btn-outline  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
    Aksi

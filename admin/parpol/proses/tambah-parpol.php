@@ -2,11 +2,11 @@
 session_start();
 // Termasuk koneksi dan model
 include '../../../koneksi.php';
-include './ParpoModel.php';
+include 'ParpoModel.php';
 
 
 // Buat objek model
-$model = new ParpolModel($pdo);
+$model = new parpolModel($pdo);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Ambil data dari form
@@ -17,8 +17,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $alamat = $_POST['alamat'];
     $periode_kepengurusan = $_POST['periode_kepengurusan'];
 
+      // Proses upload file SK
+  $sk = null; // Default jika tidak ada file yang diunggah
+  if (isset($_FILES['sk']) && $_FILES['sk']['error'] == 0) {
+      $uploadDir = '../imgSk/'; // Pastikan folder ini writable
+      $fileName = uniqid() . '_' . basename($_FILES['sk']['name']);
+      $uploadFilePath = $uploadDir . $fileName;
+
+      // Validasi file (opsional, seperti ekstensi dan ukuran)
+      $allowedExtensions = ['jpg', 'jpeg', 'png'];
+      $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+      if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
+          $_SESSION['message'] = "Format file tidak diizinkan.";
+          header("Location: ../parpol.php");
+          exit();
+      }
+
+      if (move_uploaded_file($_FILES['sk']['tmp_name'], $uploadFilePath)) {
+          $sk = $fileName; // Set nama file yang diunggah
+      } else {
+          $_SESSION['message'] = "Gagal mengunggah file SK.";
+          header("Location: ../parpol.php");
+          exit();
+      }
+  }
+
+
     // Panggil fungsi tambahData dari model
-    $result = $model->tambahData($nm_parpol, $nm_ketua, $nm_sekretaris, $nm_bendahara, $alamat, $periode_kepengurusan);
+    $result = $model->tambahData($nm_parpol, $nm_ketua, $nm_sekretaris, $nm_bendahara, $alamat, $periode_kepengurusan,$sk);
 
     $_SESSION['message'] = "Data partai politik berhasil ditambah.";
 
@@ -224,31 +250,37 @@ $user = $_SESSION['user'];
         <?php endif; ?>
 
           <!-- Vertical Form -->
-          <form class="row g-3" method="post">
+          <form class="row g-3" enctype="multipart/form-data" method="post">
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Nama Parpol</label>
-              <input required type="text" class="form-control" name="nm_parpol" id="inputNanme4">
+              <input  required type="text" class="form-control" name="nm_parpol" id="inputNanme4">
             </div>
             <div class="col-12">
               <label for="inputEmail4" class="form-label">Nama Ketua</label>
-              <input required type="text" class="form-control" name="nm_ketua" id="inputEmail4">
+              <input  required type="text" class="form-control" name="nm_ketua" id="inputEmail4">
             </div>
             <div class="col-12">
               <label for="inputPassword4" class="form-label">Nama Sekretaris</label>
-              <input  required type="text" class="form-control" name="nm_sekretaris" id="inputPassword4">
+              <input   required type="text" class="form-control" name="nm_sekretaris" id="inputPassword4">
             </div>
             <div class="col-12">
               <label for="inputAddress" class="form-label">Nama Bendahara</label>
-              <input  required type="text" class="form-control" name="nm_bendahara" id="inputAddress" >
+              <input   required type="text" class="form-control" name="nm_bendahara" id="inputAddress" >
             </div>
             <div class="col-12">
               <label for="inputAddress" class="form-label">Periode Kepengurusan</label>
-              <input  required type="text" class="form-control" name="periode_kepengurusan" id="inputAddress" >
+              <input   required type="text" class="form-control" name="periode_kepengurusan" id="inputAddress" >
             </div>
             <div class="col-12">
               <label for="inputAddress" class="form-label">Alamat Kantor</label>
-              <input  required type="text" class="form-control" name="alamat" id="inputAddress" >
+              <input   required type="text" class="form-control" name="alamat" id="inputAddress" >
             </div>
+
+            <div class="col-12">
+                    <label for="inputNanme4" class="form-label">File SK</label>
+                    <input  required class="form-control" name="sk" accept=".jpg,.jpeg,.png" type="file" id="formFile">
+                  </div>
+
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Simpan</button>
               <button type="reset" class="btn btn-secondary">Reset</button>

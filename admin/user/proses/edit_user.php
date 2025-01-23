@@ -220,30 +220,30 @@ $user = $userController->getUser($id);
 <input type="hidden" name="id" id="" value="<?= $user['id']?>">
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Nama</label>
-              <input type="text" name="nama"  value="<?= htmlspecialchars($user['nama']) ?>" class="form-control" id="inputNanme4">
+              <input required  type="text" name="nama"  value="<?= htmlspecialchars($user['nama']) ?>" class="form-control" id="inputNanme4">
             </div>
 
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Email</label>
-              <input type="email"  value="<?= htmlspecialchars($user['email']) ?>" name="email" class="form-control" id="inputNanme4">
+              <input required type="email"  value="<?= htmlspecialchars($user['email']) ?>" name="email" class="form-control" id="inputNanme4">
             </div>
 
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Password     <small style="font-size: 12px;" class="text-danger">(Biarkan kosong jika tidak ingin mengubah password)</small>
               </label>
-              <input type="password"   name="password" class="form-control" id="inputNanme4">
+              <input required type="password"   name="password" class="form-control" id="inputNanme4">
           
             </div>
 
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Alamat</label>
-              <input type="text" name="alamat" value="<?= htmlspecialchars($user['alamat']) ?>" class="form-control" id="inputNanme4">
+              <input required type="text" name="alamat" value="<?= htmlspecialchars($user['alamat']) ?>" class="form-control" id="inputNanme4">
             </div>
 
          
        
 
-            <select id="id_kategori" name="jenis_kelamin" class="form-select">
+            <select required id="id_kategori" name="jenis_kelamin" class="form-select">
          
                     <option selected  value="<?= htmlspecialchars($user['jenis_kelamin']) ?>"> <?= htmlspecialchars($user['jenis_kelamin']) ?></option>
                     <option value="Laki-Laki">Laki-Laki</option>

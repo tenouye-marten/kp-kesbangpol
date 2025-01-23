@@ -15,25 +15,73 @@ $user = $_SESSION['user'];
 $ormasModel = new OrmasModel($pdo);
 $kategoriModel = new KategoriModel($pdo);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nm_organisasi = $_POST['nm_ormas'];
-    $nm_ketua = $_POST['nm_ketua'];
-    $nm_sekretaris = $_POST['nm_sekretaris'];
-    $nm_bendahara = $_POST['nm_bendahara'];
-    $alamat = $_POST['alamat'];
-    $keterangan = $_POST['keterangan'];
-    $id_kategori = $_POST['id_kategori'];
+// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+//     $nm_organisasi = $_POST['nm_ormas'];
+//     $nm_ketua = $_POST['nm_ketua'];
+//     $nm_sekretaris = $_POST['nm_sekretaris'];
+//     $nm_bendahara = $_POST['nm_bendahara'];
+//     $alamat = $_POST['alamat'];
+//     $keterangan = $_POST['keterangan'];
+//     $id_kategori = $_POST['id_kategori'];
     
-    $result = $ormasModel->tambahOrmas($nm_organisasi, $nm_ketua, $nm_sekretaris, $nm_bendahara, $alamat,$keterangan, $id_kategori);
-    if ($result) {
-      $_SESSION['message'] = "Data ormas berhasil ditambah.";
+//     $result = $ormasModel->tambahOrmas($nm_organisasi, $nm_ketua, $nm_sekretaris, $nm_bendahara, $alamat,$keterangan, $id_kategori);
+//     if ($result) {
+//       $_SESSION['message'] = "Data ormas berhasil ditambah.";
 
-        header("Location: ../ormas.php");
-    } else {
-        header("Location: ../ormas.php");
-    }
-    exit();
+//         header("Location: ../ormas.php");
+//     } else {
+//         header("Location: ../ormas.php");
+//     }
+//     exit();
+// }
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $nm_organisasi = $_POST['nm_ormas'];
+  $nm_ketua = $_POST['nm_ketua'];
+  $nm_sekretaris = $_POST['nm_sekretaris'];
+  $nm_bendahara = $_POST['nm_bendahara'];
+  $alamat = $_POST['alamat'];
+  $keterangan = $_POST['keterangan'];
+  $id_kategori = $_POST['id_kategori'];
+
+  // Proses upload file SK
+  $sk = null; // Default jika tidak ada file yang diunggah
+  if (isset($_FILES['sk']) && $_FILES['sk']['error'] == 0) {
+      $uploadDir = '../imgSk/'; // Pastikan folder ini writable
+      $fileName = uniqid() . '_' . basename($_FILES['sk']['name']);
+      $uploadFilePath = $uploadDir . $fileName;
+
+      // Validasi file (opsional, seperti ekstensi dan ukuran)
+      $allowedExtensions = ['jpg', 'jpeg', 'png'];
+      $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+      if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
+          $_SESSION['message'] = "Format file tidak diizinkan.";
+          header("Location: ../ormas.php");
+          exit();
+      }
+
+      if (move_uploaded_file($_FILES['sk']['tmp_name'], $uploadFilePath)) {
+          $sk = $fileName; // Set nama file yang diunggah
+      } else {
+          $_SESSION['message'] = "Gagal mengunggah file SK.";
+          header("Location: ../ormas.php");
+          exit();
+      }
+  }
+
+  // Panggil fungsi tambahOrmas dengan parameter $sk
+  $result = $ormasModel->tambahOrmas($nm_organisasi, $nm_ketua, $nm_sekretaris, $nm_bendahara, $alamat, $keterangan, $id_kategori, $sk);
+
+  if ($result) {
+      $_SESSION['message'] = "Data ormas berhasil ditambah.";
+  } else {
+      $_SESSION['message'] = "Gagal menambah data ormas.";
+  }
+
+  header("Location: ../ormas.php");
+  exit();
 }
+
 
 $kategoriList = $kategoriModel->getAllKategori();
 ?>
@@ -211,31 +259,31 @@ $kategoriList = $kategoriModel->getAllKategori();
           <h5 class="card-title">Form Tambah</h5>
 
           <!-- Vertical Form -->
-          <form method="post"  class="row g-3">
+          <form method="post" enctype="multipart/form-data"  class="row g-3">
 
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Nama Organisasi Masyarakat</label>
-              <input type="text" name="nm_ormas" class="form-control" id="inputNanme4">
+              <input required type="text" name="nm_ormas" class="form-control" id="inputNanme4">
             </div>
 
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Nama Ketua</label>
-              <input type="text" name="nm_ketua" class="form-control" id="inputNanme4">
+              <input required type="text" name="nm_ketua" class="form-control" id="inputNanme4">
             </div>
 
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Nama Sekretaris</label>
-              <input type="text" name="nm_sekretaris" class="form-control" id="inputNanme4">
+              <input required type="text" name="nm_sekretaris" class="form-control" id="inputNanme4">
             </div>
 
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Nama Bendahara</label>
-              <input type="text" name="nm_bendahara" class="form-control" id="inputNanme4">
+              <input required type="text" name="nm_bendahara" class="form-control" id="inputNanme4">
             </div>
 
             <div class="col-12">
               <label for="inputNanme4" class="form-label">alaamat</label>
-              <input type="text" name="alamat" class="form-control" id="inputNanme4">
+              <input required type="text" name="alamat" class="form-control" id="inputNanme4">
             </div>
             <!-- <div class="col-12">
               <label for="inputNanme4" class="form-label">Keterangan</label>
@@ -243,7 +291,7 @@ $kategoriList = $kategoriModel->getAllKategori();
             </div> -->
             <div class="col-12">
             <label for="inputNanme4" class="form-label">Keterangan</label>
-            <select id="id_kategori" name="keterangan" class="form-select">
+            <select required id="id_kategori" name="keterangan" class="form-select">
          
                     <option value="Aktif">Aktif</option>
                     <option value="Tidak Aktif">Tidak Aktif</option>
@@ -253,12 +301,18 @@ $kategoriList = $kategoriModel->getAllKategori();
 
                     <div class="col-12">
                     <label for="inputNanme4" class="form-label">Kategori</label>
-            <select id="id_kategori" name="id_kategori" class="form-select">
+            <select required id="id_kategori" name="id_kategori" class="form-select">
             <?php foreach ($kategoriList as $kategori): ?>
                     <option value="<?php echo $kategori['id']; ?>"><?php echo $kategori['kategori']; ?></option>
                     <?php endforeach; ?>
                   </select>
                   </div>
+
+                    <div class="col-12">
+                    <label for="inputNanme4" class="form-label">File SK</label>
+                    <input required class="form-control" name="sk" accept=".jpg,.jpeg,.png" type="file" id="formFile">
+                  </div>
+
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Simpan</button>
               <button type="reset" class="btn btn-secondary">Reset</button>

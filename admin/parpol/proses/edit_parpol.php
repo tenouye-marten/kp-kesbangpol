@@ -10,46 +10,93 @@ if (!isset($_SESSION['user'])) {
 include '../../../koneksi.php';
 
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+  $id = $_GET['id'];
 
-    // Ambil data berdasarkan id
-    $query = "SELECT * FROM tbl_parpol WHERE id = :id";
-    $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+  // Ambil data berdasarkan id
+  $query = "SELECT * FROM tbl_parpol WHERE id = :id";
+  $stmt = $pdo->prepare($query);
+  $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+  $stmt->execute();
+  $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // Proses update data
-        $nm_parpol = $_POST['nm_parpol'];
-        $nm_ketua = $_POST['nm_ketua'];
-        $nm_sekretaris = $_POST['nm_sekretaris'];
-        $nm_bendahara = $_POST['nm_bendahara'];
-        $alamat = $_POST['alamat'];
-        $periode_kepengurusan = $_POST['periode_kepengurusan'];
+  $img = $data['sk'];
 
-        $update_query = "UPDATE tbl_parpol SET nm_parpol = :nm_parpol, nm_ketua = :nm_ketua, nm_sekretaris = :nm_sekretaris, nm_bendahara = :nm_bendahara, alamat = :alamat, periode_kepengurusan = :periode_kepengurusan WHERE id = :id";
-        $update_stmt = $pdo->prepare($update_query);
-        $update_stmt->bindParam(':nm_parpol', $nm_parpol);
-        $update_stmt->bindParam(':nm_ketua', $nm_ketua);
-        $update_stmt->bindParam(':nm_sekretaris', $nm_sekretaris);
-        $update_stmt->bindParam(':nm_bendahara', $nm_bendahara);
-        $update_stmt->bindParam(':alamat', $alamat);
-        $update_stmt->bindParam(':periode_kepengurusan', $periode_kepengurusan);
-        $update_stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $update_stmt->execute();
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      // Proses update data
+      $nm_parpol = $_POST['nm_parpol'];
+      $nm_ketua = $_POST['nm_ketua'];
+      $nm_sekretaris = $_POST['nm_sekretaris'];
+      $nm_bendahara = $_POST['nm_bendahara'];
+      $alamat = $_POST['alamat'];
+      $periode_kepengurusan = $_POST['periode_kepengurusan'];
 
-                // Menyimpan pesan sukses ke sesi
-                $_SESSION['message'] = "Data partai politik berhasil diperbarui.";
+      // Cek jika ada file gambar yang di-upload
+      if (isset($_FILES['sk']) && $_FILES['sk']['error'] == 0) {
+          // Proses upload sk
+          $gambar_name = $_FILES['sk']['name'];
+          $gambar_tmp = $_FILES['sk']['tmp_name'];
+          $gambar_size = $_FILES['sk']['size'];
+          $gambar_error = $_FILES['sk']['error'];
 
-        // Redirect setelah update
-        header("Location: ../parpol.php");
-        exit();
-    }
+          // Tentukan folder tujuan untuk menyimpan gambar
+          $upload_dir = '../imgSk/';
+          $gambar_ext = pathinfo($gambar_name, PATHINFO_EXTENSION);
+          $gambar_new_name = uniqid('parpol_', true) . '.' . $gambar_ext;
+
+          // Validasi ekstensi file gambar
+          $allowed_extensions = ['jpg', 'jpeg', 'png'];
+          if (in_array(strtolower($gambar_ext), $allowed_extensions)) {
+              // Cek apakah ada gambar lama yang perlu dihapus
+            
+              if ($data['sk'] && file_exists("../imgSk/" . $img)) {
+                  // Hapus file gambar lama
+                  unlink("../imgSk/". $img);
+              }
+
+              // Pindahkan gambar ke folder tujuan
+              if (move_uploaded_file($gambar_tmp, $upload_dir . $gambar_new_name)) {
+                  // Jika gambar berhasil di-upload, simpan nama gambar di database
+                  $gambar_path = $upload_dir . $gambar_new_name;
+                  // Update query untuk menyertakan gambar baru
+                  $update_query = "UPDATE tbl_parpol SET nm_parpol = :nm_parpol, nm_ketua = :nm_ketua, nm_sekretaris = :nm_sekretaris, nm_bendahara = :nm_bendahara, alamat = :alamat, periode_kepengurusan = :periode_kepengurusan, sk = :sk WHERE id = :id";
+                  $update_stmt = $pdo->prepare($update_query);
+                  $update_stmt->bindParam(':sk', $gambar_path);
+              } else {
+                  echo "Gagal meng-upload gambar.";
+                  exit();
+              }
+          } else {
+              echo "Ekstensi gambar tidak diperbolehkan.";
+              exit();
+          }
+      } else {
+          // Jika tidak ada gambar yang di-upload, tidak update gambar
+          $update_query = "UPDATE tbl_parpol SET nm_parpol = :nm_parpol, nm_ketua = :nm_ketua, nm_sekretaris = :nm_sekretaris, nm_bendahara = :nm_bendahara, alamat = :alamat, periode_kepengurusan = :periode_kepengurusan WHERE id = :id";
+          $update_stmt = $pdo->prepare($update_query);
+      }
+
+      // Bind data dan eksekusi query update
+      $update_stmt->bindParam(':nm_parpol', $nm_parpol);
+      $update_stmt->bindParam(':nm_ketua', $nm_ketua);
+      $update_stmt->bindParam(':nm_sekretaris', $nm_sekretaris);
+      $update_stmt->bindParam(':nm_bendahara', $nm_bendahara);
+      $update_stmt->bindParam(':alamat', $alamat);
+      $update_stmt->bindParam(':periode_kepengurusan', $periode_kepengurusan);
+      $update_stmt->bindParam(':periode_kepengurusan', $periode_kepengurusan);
+      $update_stmt->bindParam(':id', $id, PDO::PARAM_INT);
+      $update_stmt->execute();
+
+      // Menyimpan pesan sukses ke sesi
+      $_SESSION['message'] = "Data partai politik berhasil diperbarui.";
+
+      // Redirect setelah update
+      header("Location: ../parpol.php");
+      exit();
+  }
 } else {
-    // Jika tidak ada ID yang diterima
-    echo "Data tidak ditemukan.";
-    exit();
+  // Jika tidak ada ID yang diterima
+  echo "Data tidak ditemukan.";
+  exit();
 }
 
 
@@ -234,31 +281,41 @@ $user = $_SESSION['user'];
           <h5 class="card-title">Form Edit</h5>
 
           <!-- Vertical Form -->
-          <form class="row g-3" method="post">
+          <form class="row g-3" enctype="multipart/form-data" method="post">
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Nama Parpol</label>
-              <input value="<?= htmlspecialchars($data['nm_parpol']) ?>" type="text" class="form-control" name="nm_parpol" id="inputNanme4">
+              <input required value="<?= htmlspecialchars($data['nm_parpol']) ?>" type="text" class="form-control" name="nm_parpol" id="inputNanme4">
             </div>
             <div class="col-12">
               <label for="inputEmail4" class="form-label">Nama Ketua</label>
-              <input value="<?= htmlspecialchars($data['nm_ketua']) ?>"type="text" class="form-control" name="nm_ketua" id="inputEmail4">
+              <input required value="<?= htmlspecialchars($data['nm_ketua']) ?>"type="text" class="form-control" name="nm_ketua" id="inputEmail4">
             </div>
             <div class="col-12">
               <label for="inputPassword4" class="form-label">Nama Sekretaris</label>
-              <input value="<?= htmlspecialchars($data['nm_sekretaris']) ?>" type="text" class="form-control" name="nm_sekretaris" id="inputPassword4">
+              <input required value="<?= htmlspecialchars($data['nm_sekretaris']) ?>" type="text" class="form-control" name="nm_sekretaris" id="inputPassword4">
             </div>
             <div class="col-12">
               <label for="inputAddress" class="form-label">Nama Bendahara</label>
-              <input value="<?= htmlspecialchars($data['nm_bendahara']) ?>" type="text" class="form-control" name="nm_bendahara" id="inputAddress" placeholder="1234 Main St">
+              <input required value="<?= htmlspecialchars($data['nm_bendahara']) ?>" type="text" class="form-control" name="nm_bendahara" id="inputAddress" placeholder="1234 Main St">
             </div>
             <div class="col-12">
               <label for="inputAddress" class="form-label">Periode Kepengurusan</label>
-              <input value="<?= htmlspecialchars($data['periode_kepengurusan']) ?>" type="text" class="form-control" name="periode_kepengurusan" id="inputAddress" placeholder="1234 Main St">
+              <input required value="<?= htmlspecialchars($data['periode_kepengurusan']) ?>" type="text" class="form-control" name="periode_kepengurusan" id="inputAddress" placeholder="1234 Main St">
             </div>
             <div class="col-12">
               <label for="inputAddress" class="form-label">Alamat Kantor</label>
-              <input value="<?= htmlspecialchars($data['alamat']) ?>" type="text" class="form-control" name="alamat" id="inputAddress" placeholder="1234 Main St">
+              <input required value="<?= htmlspecialchars($data['alamat']) ?>" type="text" class="form-control" name="alamat" id="inputAddress" placeholder="1234 Main St">
             </div>
+
+            <div class="col-12">
+        <label for="sk" class="form-label">Upload SK Baru (Opsional)</label>
+        <input required type="file" class="form-control" id="sk" name="sk" accept=".pdf,.jpg,.jpeg,.png">
+        <small class="text-muted">Unggah SK baru jika ingin mengganti file lama.</small>
+        <?php if (!empty($data['sk'])): ?>
+         <img width="100" src="../imgSk/<?php echo $data['sk']; ?>" alt="">
+        <?php endif; ?>
+    </div>
+
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Simpan</button>
               <button type="reset" class="btn btn-secondary">Reset</button>

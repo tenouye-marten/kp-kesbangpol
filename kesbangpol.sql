@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 22 Jan 2025 pada 07.32
+-- Waktu pembuatan: 23 Jan 2025 pada 20.38
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -39,7 +39,8 @@ CREATE TABLE `tbl_kategori` (
 INSERT INTO `tbl_kategori` (`id`, `kategori`) VALUES
 (2, 'musik'),
 (4, 'Kerja bakti'),
-(5, 'ggh');
+(5, 'budaya'),
+(6, 'karang');
 
 -- --------------------------------------------------------
 
@@ -55,17 +56,16 @@ CREATE TABLE `tbl_ormas` (
   `nm_bendahara` varchar(125) NOT NULL,
   `alamat` longtext NOT NULL,
   `keterangan` varchar(125) NOT NULL,
-  `id_kategori` int(11) NOT NULL
+  `id_kategori` int(11) NOT NULL,
+  `sk` varchar(125) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `tbl_ormas`
 --
 
-INSERT INTO `tbl_ormas` (`id`, `nm_organisasi`, `nm_ketua`, `nm_sekretaris`, `nm_bendahara`, `alamat`, `keterangan`, `id_kategori`) VALUES
-(9, 'santai hilinhBKHK', 'bayu nknk', 'agus tinoo', 'siti no', 'Jl. Padang Bulan', 'Tidak Aktif', 5),
-(10, 'santai hilinhBKHK', 'bayu nknk', 'agus tinoo', 'siti noo', 'swakarsa arso', 'Tidak Aktif', 2),
-(11, 'lingkungan keerom', 'Yanpit', 'Surya', 'sari', 'arso 2', 'Aktif', 4);
+INSERT INTO `tbl_ormas` (`id`, `nm_organisasi`, `nm_ketua`, `nm_sekretaris`, `nm_bendahara`, `alamat`, `keterangan`, `id_kategori`, `sk`) VALUES
+(22, 'Ikatan Mahasiswa', 'Fredi', 'Ambros', 'Yanti', 'Organda', 'Aktif', 6, '67929a976cfe4_sembako.jpg');
 
 -- --------------------------------------------------------
 
@@ -80,18 +80,16 @@ CREATE TABLE `tbl_parpol` (
   `nm_sekretaris` varchar(125) NOT NULL,
   `nm_bendahara` varchar(125) NOT NULL,
   `alamat` longtext NOT NULL,
-  `periode_kepengurusan` varchar(50) NOT NULL
+  `periode_kepengurusan` varchar(50) NOT NULL,
+  `sk` varchar(125) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `tbl_parpol`
 --
 
-INSERT INTO `tbl_parpol` (`id`, `nm_parpol`, `nm_ketua`, `nm_sekretaris`, `nm_bendahara`, `alamat`, `periode_kepengurusan`) VALUES
-(2, 'tesis', 'bayu asi', 'agus  siti', 'siti noo', 'Perumnas 4', '2025-3027'),
-(3, 'tesis', 'bayu asi', 'agus  siti', 'siti noo', 'Perumnas 4', '2025-3027'),
-(7, 'tesis oke', 'bayu agri', 'agus', 'siti ', 'swakarsa arso', '2022-3027'),
-(8, 'tesis oke KKKK', 'bayu agri', 'LNLL;JN;LL;M', ';LNL;N;LN\'L\'N;LN', 'XZXZXZ', 'BKBBHJBHB');
+INSERT INTO `tbl_parpol` (`id`, `nm_parpol`, `nm_ketua`, `nm_sekretaris`, `nm_bendahara`, `alamat`, `periode_kepengurusan`, `sk`) VALUES
+(18, 'Gerindra', 'Prabowo', 'Teddy', 'Daddy', 'Jakarta', '2024-2026', '67929a5d6d93f_Screenshot 2024-07-17 034327.png');
 
 -- --------------------------------------------------------
 
@@ -153,19 +151,19 @@ ALTER TABLE `tbl_user`
 -- AUTO_INCREMENT untuk tabel `tbl_kategori`
 --
 ALTER TABLE `tbl_kategori`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `tbl_ormas`
 --
 ALTER TABLE `tbl_ormas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT untuk tabel `tbl_parpol`
 --
 ALTER TABLE `tbl_parpol`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT untuk tabel `tbl_user`

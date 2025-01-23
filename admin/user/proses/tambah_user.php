@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['tambah_user'])) {
 
     <div class="search-bar">
       <form class="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <input required type="text" name="query" placeholder="Search" title="Enter search keyword">
         <button type="submit" title="Search"><i class="bi bi-search"></i></button>
       </form>
     </div><!-- End Search Bar -->
@@ -210,28 +210,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['tambah_user'])) {
 
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Nama</label>
-              <input type="text" name="nama" class="form-control" id="inputNanme4">
+              <input required  type="text" name="nama" class="form-control" id="inputNanme4">
             </div>
 
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Email</label>
-              <input type="email" name="email" class="form-control" id="inputNanme4">
+              <input required type="email" name="email" class="form-control" id="inputNanme4">
             </div>
 
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Password</label>
-              <input type="password" name="password" class="form-control" id="inputNanme4">
+              <input required type="password" name="password" class="form-control" id="inputNanme4">
             </div>
 
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Alamat</label>
-              <input type="text" name="alamat" class="form-control" id="inputNanme4">
+              <input required type="text" name="alamat" class="form-control" id="inputNanme4">
             </div>
 
          
        
 
-            <select id="id_kategori" name="jenis_kelamin" class="form-select">
+            <select required id="id_kategori" name="jenis_kelamin" class="form-select">
          
                     <option value="Laki-Laki">Laki-Laki</option>
                     <option value="Perempuan">Perempuan</option>

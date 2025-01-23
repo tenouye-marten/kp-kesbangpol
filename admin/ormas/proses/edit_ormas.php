@@ -25,21 +25,61 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $keterangan = $_POST['keterangan'];
   $id_kategori = $_POST['id_kategori'];
 
-  $result = $ormasModel->updateOrmas($id, $nm_organisasi, $nm_ketua, $nm_sekretaris, $nm_bendahara, $alamat, $keterangan, $id_kategori);
+  // Cek apakah ada file gambar yang diunggah
+  $sk = null; // Default null jika tidak ada file baru
+  if (isset($_FILES['sk']) && $_FILES['sk']['error'] == UPLOAD_ERR_OK) {
+      $uploadDir = "../imgSk/";
+      $fileName = basename($_FILES['sk']['name']);
+      $fileTmp = $_FILES['sk']['tmp_name'];
+      $fileSize = $_FILES['sk']['size'];
+      $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+      // Validasi file (ekstensi dan ukuran)
+      $allowedExtensions = ['jpg', 'jpeg', 'png'];
+      $maxFileSize = 2 * 1024 * 1024; // 2MB
+
+      if (!in_array($fileExt, $allowedExtensions)) {
+          $_SESSION['error'] = "File harus berupa gambar (JPG, JPEG, PNG).";
+          header("Location: ../edit_ormas.php?id=$id");
+          exit();
+      }
+
+      if ($fileSize > $maxFileSize) {
+          $_SESSION['error'] = "Ukuran file gambar tidak boleh lebih dari 2MB.";
+          header("Location: ../edit_ormas.php?id=$id");
+          exit();
+      }
+
+      // Pindahkan file ke folder upload
+      $newFileName = uniqid("img_") . "." . $fileExt;
+      if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
+          $sk = $newFileName; // Set nama file baru untuk disimpan di database
+      } else {
+          $_SESSION['error'] = "Gagal mengunggah file gambar.";
+          header("Location: ../edit_ormas.php?id=$id");
+          exit();
+      }
+  }
+
+  // Panggil fungsi update dengan parameter baru
+  $result = $ormasModel->updateOrmas($id, $nm_organisasi, $nm_ketua, $nm_sekretaris, $nm_bendahara, $alamat, $keterangan, $id_kategori, $sk);
+
   if ($result) {
-
-    $_SESSION['message'] = "Data Ormas berhasil diubah.";
-
-    header("Location: ../ormas.php");
+      $_SESSION['message'] = "Data Ormas berhasil diubah.";
+      header("Location: ../ormas.php");
   } else {
-    header("Location: ../ormas.php");
+      $_SESSION['error'] = "Terjadi kesalahan saat mengubah data Ormas.";
+      header("Location: ../edit_ormas.php?id=$id");
   }
   exit();
 }
 
+
+
 $id = $_GET['id'];
 $ormas = $ormasModel->getOrmasById($id);
 $kategoriList = $kategoriModel->getAllKategori();
+
 ?>
 
 
@@ -216,41 +256,41 @@ $kategoriList = $kategoriModel->getAllKategori();
               <h5 class="card-title">Form Edit</h5>
 
               <!-- Vertical Form -->
-              <form method="post" class="row g-3">
-                <input type="hidden" name="id" value="<?php echo $ormas['id']; ?>">
+              <form method="post" enctype="multipart/form-data" class="row g-3">
+                <input required type="hidden" name="id" value="<?php echo $ormas['id']; ?>">
 
                 <div class="col-12">
                   <label for="inputNanme4" class="form-label">Nama Organisasi Masyarakat</label>
-                  <input type="text" value="<?php echo $ormas['nm_organisasi']; ?>" name="nm_organisasi" class="form-control" id="inputNanme4">
+                  <input required type="text" value="<?php echo $ormas['nm_organisasi']; ?>" name="nm_organisasi" class="form-control" id="inputNanme4">
                 </div>
 
                 <div class="col-12">
                   <label for="inputNanme4" class="form-label">Nama Ketua</label>
-                  <input type="text" value="<?php echo $ormas['nm_ketua']; ?>" name="nm_ketua" class="form-control" id="inputNanme4">
+                  <input required type="text" value="<?php echo $ormas['nm_ketua']; ?>" name="nm_ketua" class="form-control" id="inputNanme4">
                 </div>
 
                 <div class="col-12">
                   <label for="inputNanme4" class="form-label">Nama Sekretaris</label>
-                  <input type="text" value="<?php echo $ormas['nm_sekretaris']; ?>" name="nm_sekretaris" class="form-control" id="inputNanme4">
+                  <input required type="text" value="<?php echo $ormas['nm_sekretaris']; ?>" name="nm_sekretaris" class="form-control" id="inputNanme4">
                 </div>
 
                 <div class="col-12">
                   <label for="inputNanme4" class="form-label">Nama Bendahara</label>
-                  <input type="text" value="<?php echo $ormas['nm_bendahara']; ?>" name="nm_bendahara" class="form-control" id="inputNanme4">
+                  <input required type="text" value="<?php echo $ormas['nm_bendahara']; ?>" name="nm_bendahara" class="form-control" id="inputNanme4">
                 </div>
 
                 <div class="col-12">
                   <label for="inputNanme4" class="form-label">alaamat</label>
-                  <input type="text" value="<?php echo $ormas['alamat']; ?>" name="alamat" class="form-control" id="inputNanme4">
+                  <input required type="text" value="<?php echo $ormas['alamat']; ?>" name="alamat" class="form-control" id="inputNanme4">
                 </div>
                 <!-- <div class="col-12">
   <label for="inputNanme4" class="form-label">Keterangan</laabel>
-  <input type="text" name="keterangan" class="form-control" id="inputNanme4">
+  <input required type="text" name="keterangan" class="form-control" id="inputNanme4">
 </div> -->
 
                 <div class="col-12">
                 <label for="inputNanme4" class="form-label">Keterangan</label>
-                <select id="id_kategori" name="keterangan" class="form-select">
+                <select required id="id_kategori" name="keterangan" class="form-select">
 
                   <option selected value="<?php echo $ormas['keterangan']; ?>"> <?php echo $ormas['keterangan']; ?></option>
                   <option value="Aktif">Aktif</option>
@@ -261,13 +301,25 @@ $kategoriList = $kategoriModel->getAllKategori();
 
             <div class="col-12">
               <label for="inputNanme4" class="form-label">Kategori</label>
-              <select id="id_kategori" name="id_kategori" class="form-select">
+              <select required id="id_kategori" name="id_kategori" class="form-select">
 
                 <?php foreach ($kategoriList as $kategori): ?>
                   <option value="<?php echo $kategori['id']; ?>"><?php echo $kategori['kategori']; ?></option>
                 <?php endforeach; ?>
               </select>
             </div>
+
+            <div class="col-12">
+        <label for="sk" class="form-label">Upload SK Baru (Opsional)</label>
+        <input required type="file" class="form-control" id="sk" name="sk" accept=".pdf,.jpg,.jpeg,.png">
+        <small class="text-muted">Unggah SK baru jika ingin mengganti file lama.</small>
+        <?php if (!empty($ormas['sk'])): ?>
+         <img width="100" src="../imgSk/<?php echo $ormas['sk']; ?>" alt="">
+        <?php endif; ?>
+    </div>
+
+
+
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Simpan</button>
               <button type="reset" class="btn btn-secondary">Reset</button>
